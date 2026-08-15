@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { api, type Playlist } from "./api/client";
+import { Merger } from "./Merger";
 
 function App() {
   const [authChecked, setAuthChecked] = useState(false);
@@ -40,8 +41,10 @@ function App() {
 
   return (
     <div className="app">
-      <h1>Playlist Merger</h1>
-      <p>Logged in. Found {playlists.length} playlists.</p>
+      <header className="app-header">
+        <h1>Playlist Merger</h1>
+      </header>
+      <Merger playlists={playlists} />
     </div>
   );
 }
