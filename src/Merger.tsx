@@ -5,11 +5,12 @@ import { api, type Playlist, type DuplicateTrack } from "./api/client";
 
 interface MergerProps {
   playlists: Playlist[];
+  onPlaylistCreated: (playlist: Playlist) => void;
 }
 
 type Status = "idle" | "checking" | "merging" | "error";
 
-export function Merger({ playlists }: MergerProps) {
+export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
   const [playlistAId, setPlaylistAId] = useState("");
   const [playlistBId, setPlaylistBId] = useState("");
   const [newName, setNewName] = useState("");
@@ -41,6 +42,12 @@ export function Merger({ playlists }: MergerProps) {
     try {
       const result = await api.merge(playlistAId, playlistBId, newName || "Merged Playlist");
       setMergeUrl(result.new_playlist_url);
+      onPlaylistCreated({
+        id: result.new_playlist_id,
+        name: newName || "Merged Playlist",
+        track_count: result.total_tracks,
+        image: null,
+      });
       setStatus("idle");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
