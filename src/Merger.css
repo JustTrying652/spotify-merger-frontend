@@ -204,34 +204,27 @@
 
 /* --- Results --- */
 
+@keyframes resultIn {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
 .results {
   margin-top: 2.5rem;
   background: var(--surface);
   border-radius: var(--radius);
   padding: 1.5rem;
   border: 1px solid rgba(201, 162, 39, 0.15);
+  animation: resultIn 0.3s ease;
 }
 
-.results h2 {
-  font-size: 1.05rem;
-  margin-bottom: 1rem;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
 
-.results h2::before {
-  content: "";
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--rust);
-  flex-shrink: 0;
-}
-
-.results.success h2::before {
-  background: var(--brass);
-}
 
 .track-list {
   list-style: none;

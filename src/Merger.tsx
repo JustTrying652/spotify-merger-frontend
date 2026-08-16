@@ -85,16 +85,20 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
             {status === "checking" ? "Checking…" : "Find duplicates"}
           </button>
 
-          <div className="merge-row">
-            <input
-              type="text"
-              placeholder="New playlist name"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-            />
-            <button className="brass-button" onClick={handleMerge} disabled={status === "merging"}>
-              {status === "merging" ? "Merging…" : "Merge into new playlist"}
-            </button>
+          <div className="merge-group">
+            <label htmlFor="new-name">New playlist name</label>
+            <div className="merge-row">
+              <input
+                id="new-name"
+                type="text"
+                placeholder="Merged Playlist"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+              />
+              <button className="brass-button" onClick={handleMerge} disabled={status === "merging"}>
+                {status === "merging" ? "Merging…" : "Merge into new playlist"}
+              </button>
+            </div>
           </div>
         </div>
       )}
