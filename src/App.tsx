@@ -39,12 +39,16 @@ function App() {
     );
   }
 
+  const handlePlaylistCreated = (newPlaylist: Playlist) => {
+    setPlaylists((prev) => [newPlaylist, ...prev]);
+  };
+
   return (
     <div className="app">
       <header className="app-header">
         <h1>Playlist Merger</h1>
       </header>
-      <Merger playlists={playlists} />
+      <Merger playlists={playlists} onPlaylistCreated={handlePlaylistCreated} />
     </div>
   );
 }
