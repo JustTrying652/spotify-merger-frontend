@@ -1,5 +1,7 @@
+import "./Merger.css";
 import { useState } from "react";
 import { api, type Playlist, type DuplicateTrack } from "./api/client";
+
 
 interface MergerProps {
   playlists: Playlist[];
