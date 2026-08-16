@@ -121,7 +121,7 @@
   margin-top: 2rem;
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 1.25rem;
 }
 
 .actions button {
@@ -131,12 +131,17 @@
   border-radius: 8px;
   padding: 0.7rem 1.25rem;
   font-size: 0.9rem;
+  height: 42px;
   align-self: flex-start;
-  transition: border-color 0.15s ease;
+  transition: border-color 0.15s ease, transform 0.1s ease;
 }
 
-.actions button:hover {
+.actions button:hover:not(:disabled) {
   border-color: var(--brass);
+}
+
+.actions button:active:not(:disabled) {
+  transform: scale(0.98);
 }
 
 .actions button:disabled {
@@ -144,27 +149,47 @@
   cursor: not-allowed;
 }
 
+.merge-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.merge-group label {
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--paper-dim);
+}
+
 .merge-row {
   display: flex;
   gap: 0.75rem;
-  align-items: center;
 }
 
 .merge-row input {
   flex: 1;
   max-width: 320px;
+  height: 42px;
   background: var(--surface-raised);
   border: 1px solid rgba(237, 231, 246, 0.15);
   border-radius: 8px;
-  padding: 0.7rem 0.9rem;
+  padding: 0 0.9rem;
   color: var(--paper);
   font-family: var(--font-body);
   font-size: 0.9rem;
+  box-sizing: border-box;
 }
 
 .merge-row input::placeholder {
   color: var(--paper-dim);
 }
+
+.merge-row .brass-button {
+  height: 42px;
+  padding: 0 1.5rem;
+}
+
 
 .brass-button {
   background: var(--brass) !important;
