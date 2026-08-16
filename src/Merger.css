@@ -57,16 +57,24 @@
   padding: 0.6rem 0.75rem;
   color: var(--paper);
   text-align: left;
-  transition: border-color 0.15s ease, background 0.15s ease;
+  transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease, box-shadow 0.15s ease;
 }
 
 .crate-item:hover {
   border-color: rgba(201, 162, 39, 0.4);
+  background: #29222f;
+  transform: translateX(2px);
 }
 
 .crate-item.selected {
   border-color: var(--brass);
-  background: rgba(201, 162, 39, 0.08);
+  background: rgba(201, 162, 39, 0.1);
+  box-shadow: 0 0 0 1px rgba(201, 162, 39, 0.15), 0 4px 12px rgba(201, 162, 39, 0.08);
+}
+
+.crate-item.selected .crate-item-name {
+  color: var(--brass);
+  font-weight: 500;
 }
 
 .crate-item-image {
