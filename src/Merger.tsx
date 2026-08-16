@@ -75,6 +75,10 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
         />
       </div>
 
+      {!bothSelected && (
+        <p className="hint">Pick a playlist in each crate to compare or merge them.</p>
+      )}
+
       {bothSelected && (
         <div className="actions">
           <button onClick={handleCheckDuplicates} disabled={status === "checking"}>
@@ -112,7 +116,7 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
       )}
 
       {mergeUrl && (
-        <div className="results">
+        <div className="results success">
           <h2>Playlist created</h2>
           <a href={mergeUrl} target="_blank" rel="noreferrer" className="brass-link">
             Open in Spotify
