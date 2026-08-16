@@ -47,6 +47,7 @@ function App() {
     <div className="app">
       <header className="app-header">
         <h1>Playlist Merger</h1>
+        <p className="tagline">Find the overlap. Keep what's unique.</p>
       </header>
       <Merger playlists={playlists} onPlaylistCreated={handlePlaylistCreated} />
     </div>
