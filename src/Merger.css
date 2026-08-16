@@ -13,6 +13,16 @@
   align-items: start;
 }
 
+.hint {
+  text-align: center;
+  color: var(--paper-dim);
+  font-size: 0.9rem;
+  margin: 2.5rem 0;
+  padding: 1.5rem;
+  border: 1px dashed rgba(237, 231, 246, 0.15);
+  border-radius: var(--radius);
+}
+
 .crate {
   background: var(--surface);
   border-radius: var(--radius);
@@ -163,11 +173,31 @@
 
 .results {
   margin-top: 2.5rem;
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 1.5rem;
+  border: 1px solid rgba(201, 162, 39, 0.15);
 }
 
 .results h2 {
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.results h2::before {
+  content: "";
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--rust);
+  flex-shrink: 0;
+}
+
+.results.success h2::before {
+  background: var(--brass);
 }
 
 .track-list {
