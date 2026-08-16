@@ -46,11 +46,33 @@ button {
 .app-header {
   max-width: 960px;
   margin: 0 auto;
-  padding: 2rem 1.5rem 0;
+  padding: 3rem 1.5rem 1rem;
+  position: relative;
+}
+
+.app-header::before {
+  content: "";
+  position: absolute;
+  top: -80px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  height: 300px;
+  background: radial-gradient(ellipse at center, rgba(201, 162, 39, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 .app-header h1 {
-  font-size: 1.6rem;
+  font-size: 2.1rem;
+  position: relative;
+}
+
+.app-header .tagline {
+  color: var(--paper-dim);
+  font-size: 0.95rem;
+  margin-top: 0.4rem;
+  position: relative;
 }
 
 .login-screen {
