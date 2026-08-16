@@ -42,3 +42,57 @@ button {
   outline: 2px solid var(--brass);
   outline-offset: 2px;
 }
+
+.app-header {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 2rem 1.5rem 0;
+}
+
+.app-header h1 {
+  font-size: 1.6rem;
+}
+
+.login-screen {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  text-align: center;
+  padding: 0 1.5rem;
+}
+
+.login-screen h1 {
+  font-size: 2rem;
+}
+
+.login-screen p {
+  color: var(--paper-dim);
+  max-width: 360px;
+}
+
+.brass-button {
+  background: var(--brass);
+  color: var(--ink);
+  border: none;
+  border-radius: 8px;
+  padding: 0.8rem 1.75rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  margin-top: 0.5rem;
+}
+
+.brass-button:hover {
+  background: #ddb632;
+}
+
+.loading {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--paper-dim);
+  font-family: var(--font-mono);
+}
