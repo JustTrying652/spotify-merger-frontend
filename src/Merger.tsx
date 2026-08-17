@@ -63,6 +63,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
         name: newName || "Merged Playlist",
         track_count: result.total_tracks,
         image: null,
+        owner: "",
       });
       setStatus("idle");
     } catch (e) {
@@ -199,7 +200,10 @@ function PlaylistPicker({ label, playlists, selectedId, onSelect, excludeId }: P
               onClick={() => onSelect(p.id)}
             >
               {p.image && <img src={p.image} alt="" className="crate-item-image" />}
-              <span className="crate-item-name">{p.name}</span>
+              <div className="crate-item-text">
+                <span className="crate-item-name">{p.name}</span>
+                <span className="crate-item-owner">by {p.owner}</span>
+              </div>
               <span className="crate-item-count">{p.track_count} tracks</span>
             </button>
           ))}
