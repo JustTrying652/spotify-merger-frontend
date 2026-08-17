@@ -21,6 +21,7 @@ export interface Playlist {
   name: string;
   track_count: number;
   image: string | null;
+  owner: string;
 }
 
 export interface MergeResult {
