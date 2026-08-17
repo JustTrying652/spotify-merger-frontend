@@ -34,11 +34,25 @@ export interface DuplicateTrack {
   name: string;
   artists: string;
   uri: string;
+  image: string | null;
+}
+
+export interface NearDuplicateTrack {
+  name: string;
+  artists: string;
+  image: string | null;
+}
+
+export interface NearDuplicatePair {
+  a: NearDuplicateTrack;
+  b: NearDuplicateTrack;
 }
 
 export interface DuplicatesResult {
   duplicate_count: number;
   duplicates: DuplicateTrack[];
+  near_duplicate_count: number;
+  near_duplicates: NearDuplicatePair[];
 }
 
 export const api = {
