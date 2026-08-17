@@ -1,6 +1,6 @@
 import "./Merger.css";
 import { useState } from "react";
-import { api, type Playlist, type DuplicateTrack } from "./api/client";
+import { api, type Playlist, type DuplicateTrack, type NearDuplicatePair } from "./api/client";
 
 
 interface MergerProps {
@@ -17,6 +17,7 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const [duplicates, setDuplicates] = useState<DuplicateTrack[] | null>(null);
+  const [nearDuplicates, setNearDuplicates] = useState<NearDuplicatePair[]>([]);
   const [mergeUrl, setMergeUrl] = useState<string | null>(null);
 
   const bothSelected = playlistAId && playlistBId && playlistAId !== playlistBId;
@@ -25,9 +26,11 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
     setStatus("checking");
     setError("");
     setDuplicates(null);
+    setNearDuplicates([]);
     try {
       const result = await api.findDuplicates(playlistAId, playlistBId);
       setDuplicates(result.duplicates);
+      setNearDuplicates(result.near_duplicates);
       setStatus("idle");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
@@ -107,12 +110,42 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
 
       {duplicates && (
         <div className="results">
-          <h2>{duplicates.length} duplicate{duplicates.length !== 1 ? "s" : ""} found</h2>
+          <h2>{duplicates.length} exact duplicate{duplicates.length !== 1 ? "s" : ""} found</h2>
           <ul className="track-list">
             {duplicates.map((t) => (
               <li key={t.uri}>
-                <span className="track-name">{t.name}</span>
+                <div className="track-info">
+                  {t.image && <img src={t.image} alt="" className="track-thumb" />}
+                  <span className="track-name">{t.name}</span>
+                </div>
                 <span className="track-artists">{t.artists}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
+      {nearDuplicates.length > 0 && (
+        <div className="results">
+          <h2>{nearDuplicates.length} possible duplicate{nearDuplicates.length !== 1 ? "s" : ""} (different release)</h2>
+          <ul className="near-dup-list">
+            {nearDuplicates.map((pair, i) => (
+              <li key={i}>
+                <div className="near-dup-track">
+                  {pair.a.image && <img src={pair.a.image} alt="" className="track-thumb" />}
+                  <div>
+                    <span className="track-name">{pair.a.name}</span>
+                    <span className="track-artists">{pair.a.artists}</span>
+                  </div>
+                </div>
+                <span className="near-dup-vs">~</span>
+                <div className="near-dup-track">
+                  {pair.b.image && <img src={pair.b.image} alt="" className="track-thumb" />}
+                  <div>
+                    <span className="track-name">{pair.b.name}</span>
+                    <span className="track-artists">{pair.b.artists}</span>
+                  </div>
+                </div>
               </li>
             ))}
           </ul>
