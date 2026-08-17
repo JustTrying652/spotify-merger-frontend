@@ -83,9 +83,23 @@
   flex-shrink: 0;
 }
 
-.crate-item-name {
+.crate-item-text {
   flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.crate-item-name {
   font-size: 0.9rem;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.crate-item-owner {
+  font-size: 0.72rem;
+  color: var(--paper-dim);
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
