@@ -6,6 +6,7 @@ function App() {
   const [authChecked, setAuthChecked] = useState(false);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [playlists, setPlaylists] = useState<Playlist[]>([]);
+  const [backdropImage, setBackdropImage] = useState<string | null>(null);
 
   useEffect(() => {
     api
@@ -45,11 +46,14 @@ function App() {
 
   return (
     <div className="app">
+      {backdropImage && (
+  <div className="backdrop" style={{ backgroundImage: `url(${backdropImage})` }} />
+)}
       <header className="app-header">
         <h1>Playlist Merger</h1>
         <p className="tagline">Find the overlap. Keep what's unique.</p>
       </header>
-      <Merger playlists={playlists} onPlaylistCreated={handlePlaylistCreated} />
+      <Merger playlists={playlists} onPlaylistCreated={handlePlaylistCreated} onBackdropChange={setBackdropImage} />
     </div>
   );
 }
