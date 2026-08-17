@@ -236,25 +236,78 @@
 .track-list li {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   gap: 1rem;
   background: var(--surface);
   border-left: 3px solid var(--rust);
   border-radius: 4px;
-  padding: 0.6rem 0.9rem;
+  padding: 0.5rem 0.9rem;
   font-size: 0.88rem;
 }
 
-.track-name {
-  color: var(--paper);
+.track-info {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  min-width: 0;
 }
 
-.track-artists {
-  color: var(--paper-dim);
-  font-family: var(--font-mono);
-  font-size: 0.8rem;
-  white-space: nowrap;
+.track-thumb {
+  width: 32px;
+  height: 32px;
+  border-radius: 4px;
+  object-fit: cover;
+  flex-shrink: 0;
+}
+
+.near-dup-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.near-dup-list li {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  background: var(--surface);
+  border-left: 3px solid var(--brass-dim);
+  border-radius: 4px;
+  padding: 0.6rem 0.9rem;
+}
+
+.near-dup-track {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.near-dup-track > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.near-dup-track .track-name {
+  font-size: 0.85rem;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.near-dup-track .track-artists {
+  font-size: 0.72rem;
+}
+
+.near-dup-vs {
+  color: var(--paper-dim);
+  font-family: var(--font-mono);
+  flex-shrink: 0;
 }
 
 .brass-link {
