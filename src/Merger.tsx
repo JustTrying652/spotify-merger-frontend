@@ -6,11 +6,12 @@ import { api, type Playlist, type DuplicateTrack, type NearDuplicatePair } from 
 interface MergerProps {
   playlists: Playlist[];
   onPlaylistCreated: (playlist: Playlist) => void;
+  onBackdropChange: (image: string | null) => void;
 }
 
 type Status = "idle" | "checking" | "merging" | "error";
 
-export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
+export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: MergerProps) {
   const [playlistAId, setPlaylistAId] = useState("");
   const [playlistBId, setPlaylistBId] = useState("");
   const [newName, setNewName] = useState("");
@@ -21,6 +22,18 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
   const [mergeUrl, setMergeUrl] = useState<string | null>(null);
 
   const bothSelected = playlistAId && playlistBId && playlistAId !== playlistBId;
+
+  const handleSelectA = (id: string) => {
+    setPlaylistAId(id);
+    const playlist = playlists.find((p) => p.id === id);
+    onBackdropChange(playlist?.image ?? null);
+  };
+
+  const handleSelectB = (id: string) => {
+    setPlaylistBId(id);
+    const playlist = playlists.find((p) => p.id === id);
+    onBackdropChange(playlist?.image ?? null);
+  };
 
   const handleCheckDuplicates = async () => {
     setStatus("checking");
@@ -65,7 +78,7 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
           label="Crate A"
           playlists={playlists}
           selectedId={playlistAId}
-          onSelect={setPlaylistAId}
+          onSelect={handleSelectA}
           excludeId={playlistBId}
         />
         <div className="crate-divider" aria-hidden="true" />
@@ -73,7 +86,7 @@ export function Merger({ playlists, onPlaylistCreated }: MergerProps) {
           label="Crate B"
           playlists={playlists}
           selectedId={playlistBId}
-          onSelect={setPlaylistBId}
+          onSelect={handleSelectB}
           excludeId={playlistAId}
         />
       </div>
