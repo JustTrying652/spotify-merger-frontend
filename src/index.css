@@ -118,3 +118,14 @@ button {
   color: var(--paper-dim);
   font-family: var(--font-mono);
 }
+
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(60px) brightness(0.4);
+  opacity: 0.5;
+  z-index: -1;
+  transition: opacity 0.4s ease;
+}
