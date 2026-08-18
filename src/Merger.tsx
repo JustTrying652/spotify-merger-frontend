@@ -73,6 +73,15 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     }
   };
 
+    const playlistAName = playlists.find((p) => p.id === playlistAId)?.name ?? "Crate A";
+  const playlistBName = playlists.find((p) => p.id === playlistBId)?.name ?? "Crate B";
+
+  const sortedDuplicates = duplicates
+    ? [...duplicates].sort((a, b) =>
+        sortBy === "name" ? a.name.localeCompare(b.name) : a.artists.localeCompare(b.artists)
+      )
+    : null;
+
   return (
     <div className="merger">
       <div className="crates">
