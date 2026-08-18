@@ -132,15 +132,37 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
 
       {error && <p className="error">{error}</p>}
 
-      {duplicates && (
+            {duplicates && (
         <div className="results">
-          <h2>{duplicates.length} exact duplicate{duplicates.length !== 1 ? "s" : ""} found</h2>
+          <div className="results-header">
+            <h2>{duplicates.length} exact duplicate{duplicates.length !== 1 ? "s" : ""} found</h2>
+            <div className="sort-controls">
+              <span>Sort:</span>
+              <button
+                className={sortBy === "name" ? "sort-active" : ""}
+                onClick={() => setSortBy("name")}
+              >
+                Track
+              </button>
+              <button
+                className={sortBy === "artist" ? "sort-active" : ""}
+                onClick={() => setSortBy("artist")}
+              >
+                Artist
+              </button>
+            </div>
+          </div>
           <ul className="track-list">
-            {duplicates.map((t) => (
+            {sortedDuplicates!.map((t) => (
               <li key={t.uri}>
                 <div className="track-info">
                   {t.image && <img src={t.image} alt="" className="track-thumb" />}
-                  <span className="track-name">{t.name}</span>
+                  <div>
+                    <span className="track-name">{t.name}</span>
+                    <span className="track-appears-in">
+                      In {playlistAName} & {playlistBName}
+                    </span>
+                  </div>
                 </div>
                 <span className="track-artists">{t.artists}</span>
               </li>
