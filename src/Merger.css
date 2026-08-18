@@ -236,6 +236,49 @@
   animation: resultIn 0.3s ease;
 }
 
+.results-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.results-header h2 {
+  margin-bottom: 0;
+}
+
+.sort-controls {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.78rem;
+  color: var(--paper-dim);
+}
+
+.sort-controls button {
+  background: transparent;
+  border: 1px solid rgba(237, 231, 246, 0.15);
+  border-radius: 6px;
+  padding: 0.25rem 0.6rem;
+  color: var(--paper-dim);
+  font-size: 0.78rem;
+}
+
+.sort-controls button.sort-active {
+  border-color: var(--brass);
+  color: var(--brass);
+}
+
+.track-info > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.track-appears-in {
+  font-size: 0.7rem;
+  color: var(--paper-dim);
+}
 
 
 .track-list {
