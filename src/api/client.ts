@@ -59,10 +59,10 @@ export interface DuplicatesResult {
 export const api = {
   login: () => apiFetch<{ auth_url: string }>("/auth/login/"),
   myPlaylists: () => apiFetch<{ playlists: Playlist[] }>("/playlists/"),
-  merge: (playlist_a_id: string, playlist_b_id: string, new_name: string) =>
+  merge: (playlist_a_id: string, playlist_b_id: string, new_name: string, isPublic: boolean) =>
     apiFetch<MergeResult>("/merge/", {
       method: "POST",
-      body: JSON.stringify({ playlist_a_id, playlist_b_id, new_name }),
+      body: JSON.stringify({ playlist_a_id, playlist_b_id, new_name, public: isPublic }),
     }),
   findDuplicates: (playlist_a_id: string, playlist_b_id: string) =>
     apiFetch<DuplicatesResult>("/duplicates/", {
