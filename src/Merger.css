@@ -382,3 +382,20 @@
   margin-top: 1rem;
   font-size: 0.9rem;
 }
+
+.visibility-toggle {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.82rem;
+  color: var(--paper-dim);
+  cursor: pointer;
+  width: fit-content;
+}
+
+.visibility-toggle input {
+  accent-color: var(--brass);
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+}
