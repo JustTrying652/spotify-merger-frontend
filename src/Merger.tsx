@@ -58,7 +58,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     setError("");
     setMergeUrl(null);
     try {
-      const result = await api.merge(playlistAId, playlistBId, newName || "Merged Playlist");
+      const result = await api.merge(playlistAId, playlistBId, newName || "Merged Playlist", isPublic);
       setMergeUrl(result.new_playlist_url);
       onPlaylistCreated({
         id: result.new_playlist_id,
