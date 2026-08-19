@@ -127,6 +127,14 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
                 {status === "merging" ? "Merging…" : "Merge into new playlist"}
               </button>
             </div>
+            <label className="visibility-toggle">
+              <input
+                type="checkbox"
+                checked={isPublic}
+                onChange={(e) => setIsPublic(e.target.checked)}
+              />
+              Make this playlist public
+            </label>
           </div>
         </div>
       )}
