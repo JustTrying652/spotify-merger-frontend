@@ -20,7 +20,8 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
   const [duplicates, setDuplicates] = useState<DuplicateTrack[] | null>(null);
   const [nearDuplicates, setNearDuplicates] = useState<NearDuplicatePair[]>([]);
   const [mergeUrl, setMergeUrl] = useState<string | null>(null);
-    const [sortBy, setSortBy] = useState<"name" | "artist">("name");
+  const [sortBy, setSortBy] = useState<"name" | "artist">("name");
+  const [isPublic, setIsPublic] = useState(false);
 
   const bothSelected = playlistAId && playlistBId && playlistAId !== playlistBId;
 
