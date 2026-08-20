@@ -56,6 +56,12 @@ export interface DuplicatesResult {
   near_duplicates: NearDuplicatePair[];
 }
 
+export interface PreviewResult {
+  total_tracks: number;
+  duplicates_removed: number;
+  total_duration: string;
+}
+
 export const api = {
   login: () => apiFetch<{ auth_url: string }>("/auth/login/"),
   myPlaylists: () => apiFetch<{ playlists: Playlist[] }>("/playlists/"),
@@ -66,6 +72,11 @@ export const api = {
     }),
   findDuplicates: (playlist_a_id: string, playlist_b_id: string) =>
     apiFetch<DuplicatesResult>("/duplicates/", {
+      method: "POST",
+      body: JSON.stringify({ playlist_a_id, playlist_b_id }),
+    }),
+  preview: (playlist_a_id: string, playlist_b_id: string) =>
+    apiFetch<PreviewResult>("/preview/", {
       method: "POST",
       body: JSON.stringify({ playlist_a_id, playlist_b_id }),
     }),
