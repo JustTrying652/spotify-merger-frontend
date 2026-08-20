@@ -230,6 +230,29 @@
   background: #ddb632 !important;
 }
 
+.preview-stats {
+  display: flex;
+  gap: 2rem;
+  margin-bottom: 1.25rem;
+}
+
+.preview-stats > div {
+  display: flex;
+  flex-direction: column;
+}
+
+.preview-number {
+  font-family: var(--font-mono);
+  font-size: 1.6rem;
+  color: var(--brass);
+}
+
+.preview-label {
+  font-size: 0.75rem;
+  color: var(--paper-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+}
 /* --- Results --- */
 
 @keyframes resultIn {
