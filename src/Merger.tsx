@@ -22,6 +22,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
   const [mergeUrl, setMergeUrl] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"name" | "artist">("name");
   const [isPublic, setIsPublic] = useState(false);
+  const [preview, setPreview] = useState<{ total_tracks: number; duplicates_removed: number; total_duration: string } | null>(null);
 
   const bothSelected = playlistAId && playlistBId && playlistAId !== playlistBId;
 
@@ -53,7 +54,21 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     }
   };
 
-  const handleMerge = async () => {
+  const handlePreview = async () => {
+    setStatus("checking");
+    setError("");
+    setPreview(null);
+    try {
+      const result = await api.preview(playlistAId, playlistBId);
+      setPreview(result);
+      setStatus("idle");
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Something went wrong");
+      setStatus("error");
+    }
+  };
+
+  const handleConfirmMerge = async () => {
     setStatus("merging");
     setError("");
     setMergeUrl(null);
@@ -67,6 +82,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
         image: null,
         owner: "",
       });
+      setPreview(null);
       setStatus("idle");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Something went wrong");
@@ -74,7 +90,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     }
   };
 
-    const playlistAName = playlists.find((p) => p.id === playlistAId)?.name ?? "Crate A";
+  const playlistAName = playlists.find((p) => p.id === playlistAId)?.name ?? "Crate A";
   const playlistBName = playlists.find((p) => p.id === playlistBId)?.name ?? "Crate B";
 
   const sortedDuplicates = duplicates
@@ -123,8 +139,8 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
                 value={newName}
                 onChange={(e) => setNewName(e.target.value)}
               />
-              <button className="brass-button" onClick={handleMerge} disabled={status === "merging"}>
-                {status === "merging" ? "Merging…" : "Merge into new playlist"}
+              <button className="brass-button" onClick={handlePreview} disabled={status === "checking"}>
+                {status === "checking" ? "Checking…" : "Preview merge"}
               </button>
             </div>
             <label className="visibility-toggle">
@@ -138,10 +154,32 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
           </div>
         </div>
       )}
+      {preview && (
+        <div className="results preview">
+          <h2>Preview</h2>
+          <div className="preview-stats">
+            <div>
+              <span className="preview-number">{preview.total_tracks}</span>
+              <span className="preview-label">tracks</span>
+            </div>
+            <div>
+              <span className="preview-number">{preview.total_duration}</span>
+              <span className="preview-label">duration</span>
+            </div>
+            <div>
+              <span className="preview-number">{preview.duplicates_removed}</span>
+              <span className="preview-label">removed</span>
+            </div>
+          </div>
+          <button className="brass-button" onClick={handleConfirmMerge} disabled={status === "merging"}>
+            {status === "merging" ? "Creating…" : "Confirm and create playlist"}
+          </button>
+        </div>
+      )}
 
       {error && <p className="error">{error}</p>}
 
-            {duplicates && (
+        {duplicates && (
         <div className="results">
           <div className="results-header">
             <h2>{duplicates.length} exact duplicate{duplicates.length !== 1 ? "s" : ""} found</h2>
