@@ -1,7 +1,12 @@
 import "./Merger.css";
 import { useState } from "react";
-import { api, type Playlist, type DuplicateTrack, type NearDuplicatePair } from "./api/client";
-
+import {
+  api,
+  type Playlist,
+  type DuplicateTrack,
+  type NearDuplicatePair,
+  exportPlaylistUrl,
+} from "./api/client";
 
 interface MergerProps {
   playlists: Playlist[];
@@ -15,25 +20,32 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
   const [playlistAId, setPlaylistAId] = useState("");
   const [playlistBId, setPlaylistBId] = useState("");
   const [newName, setNewName] = useState("");
+  const [isPublic, setIsPublic] = useState(false);
   const [status, setStatus] = useState<Status>("idle");
   const [error, setError] = useState("");
   const [duplicates, setDuplicates] = useState<DuplicateTrack[] | null>(null);
   const [nearDuplicates, setNearDuplicates] = useState<NearDuplicatePair[]>([]);
-  const [mergeUrl, setMergeUrl] = useState<string | null>(null);
   const [sortBy, setSortBy] = useState<"name" | "artist">("name");
-  const [isPublic, setIsPublic] = useState(false);
-  const [preview, setPreview] = useState<{ total_tracks: number; duplicates_removed: number; total_duration: string } | null>(null);
+  const [preview, setPreview] = useState<{
+    total_tracks: number;
+    duplicates_removed: number;
+    total_duration: string;
+  } | null>(null);
+  const [mergeUrl, setMergeUrl] = useState<string | null>(null);
 
   const bothSelected = playlistAId && playlistBId && playlistAId !== playlistBId;
 
+  const playlistAName = playlists.find((p) => p.id === playlistAId)?.name ?? "Crate A";
+  const playlistBName = playlists.find((p) => p.id === playlistBId)?.name ?? "Crate B";
+
+  const sortedDuplicates = duplicates
+    ? [...duplicates].sort((a, b) =>
+        sortBy === "name" ? a.name.localeCompare(b.name) : a.artists.localeCompare(b.artists)
+      )
+    : null;
+
   const handleSelectA = (id: string) => {
     setPlaylistAId(id);
-    const playlist = playlists.find((p) => p.id === id);
-    onBackdropChange(playlist?.image ?? null);
-  };
-
-  const handleSelectB = (id: string) => {
-    setPlaylistBId(id);
     const playlist = playlists.find((p) => p.id === id);
     onBackdropChange(playlist?.image ?? null);
   };
@@ -90,15 +102,6 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     }
   };
 
-  const playlistAName = playlists.find((p) => p.id === playlistAId)?.name ?? "Crate A";
-  const playlistBName = playlists.find((p) => p.id === playlistBId)?.name ?? "Crate B";
-
-  const sortedDuplicates = duplicates
-    ? [...duplicates].sort((a, b) =>
-        sortBy === "name" ? a.name.localeCompare(b.name) : a.artists.localeCompare(b.artists)
-      )
-    : null;
-
   return (
     <div className="merger">
       <div className="crates">
@@ -114,7 +117,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
           label="Crate B"
           playlists={playlists}
           selectedId={playlistBId}
-          onSelect={handleSelectB}
+          onSelect={setPlaylistBId}
           excludeId={playlistAId}
         />
       </div>
@@ -140,7 +143,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
                 onChange={(e) => setNewName(e.target.value)}
               />
               <button className="brass-button" onClick={handlePreview} disabled={status === "checking"}>
-                {status === "checking" ? "Checking…" : "Preview merge"}
+                {status === "checking" ? "Calculating…" : "Preview merge"}
               </button>
             </div>
             <label className="visibility-toggle">
@@ -154,32 +157,10 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
           </div>
         </div>
       )}
-      {preview && (
-        <div className="results preview">
-          <h2>Preview</h2>
-          <div className="preview-stats">
-            <div>
-              <span className="preview-number">{preview.total_tracks}</span>
-              <span className="preview-label">tracks</span>
-            </div>
-            <div>
-              <span className="preview-number">{preview.total_duration}</span>
-              <span className="preview-label">duration</span>
-            </div>
-            <div>
-              <span className="preview-number">{preview.duplicates_removed}</span>
-              <span className="preview-label">removed</span>
-            </div>
-          </div>
-          <button className="brass-button" onClick={handleConfirmMerge} disabled={status === "merging"}>
-            {status === "merging" ? "Creating…" : "Confirm and create playlist"}
-          </button>
-        </div>
-      )}
 
       {error && <p className="error">{error}</p>}
 
-        {duplicates && (
+      {duplicates && (
         <div className="results">
           <div className="results-header">
             <h2>{duplicates.length} exact duplicate{duplicates.length !== 1 ? "s" : ""} found</h2>
@@ -245,6 +226,29 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
         </div>
       )}
 
+      {preview && (
+        <div className="results preview">
+          <h2>Preview</h2>
+          <div className="preview-stats">
+            <div>
+              <span className="preview-number">{preview.total_tracks}</span>
+              <span className="preview-label">tracks</span>
+            </div>
+            <div>
+              <span className="preview-number">{preview.total_duration}</span>
+              <span className="preview-label">duration</span>
+            </div>
+            <div>
+              <span className="preview-number">{preview.duplicates_removed}</span>
+              <span className="preview-label">removed</span>
+            </div>
+          </div>
+          <button className="brass-button" onClick={handleConfirmMerge} disabled={status === "merging"}>
+            {status === "merging" ? "Creating…" : "Confirm and create playlist"}
+          </button>
+        </div>
+      )}
+
       {mergeUrl && (
         <div className="results success">
           <h2>Playlist created</h2>
@@ -273,18 +277,24 @@ function PlaylistPicker({ label, playlists, selectedId, onSelect, excludeId }: P
         {playlists
           .filter((p) => p.id !== excludeId)
           .map((p) => (
-            <button
-              key={p.id}
-              className={`crate-item ${selectedId === p.id ? "selected" : ""}`}
-              onClick={() => onSelect(p.id)}
-            >
-              {p.image && <img src={p.image} alt="" className="crate-item-image" />}
-              <div className="crate-item-text">
-                <span className="crate-item-name">{p.name}</span>
-                <span className="crate-item-owner">by {p.owner}</span>
-              </div>
-              <span className="crate-item-count">{p.track_count} tracks</span>
-            </button>
+            <div key={p.id} className={`crate-item ${selectedId === p.id ? "selected" : ""}`}>
+              <button className="crate-item-select" onClick={() => onSelect(p.id)}>
+                {p.image && <img src={p.image} alt="" className="crate-item-image" />}
+                <div className="crate-item-text">
+                  <span className="crate-item-name">{p.name}</span>
+                  <span className="crate-item-owner">by {p.owner}</span>
+                </div>
+                <span className="crate-item-count">{p.track_count} tracks</span>
+              </button>
+              <a
+                href={exportPlaylistUrl(p.id, "csv")}
+                className="crate-item-export"
+                title="Export as CSV"
+                onClick={(e) => e.stopPropagation()}
+              >
+                ⬇
+              </a>
+            </div>
           ))}
       </div>
     </div>
