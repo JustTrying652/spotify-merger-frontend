@@ -62,6 +62,10 @@ export interface PreviewResult {
   total_duration: string;
 }
 
+export function exportPlaylistUrl(playlistId: string, filetype: "json" | "csv"): string {
+  return `${API_BASE}/export/${playlistId}/?filetype=${filetype}`;
+}
+
 export const api = {
   login: () => apiFetch<{ auth_url: string }>("/auth/login/"),
   myPlaylists: () => apiFetch<{ playlists: Playlist[] }>("/playlists/"),
