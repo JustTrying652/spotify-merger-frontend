@@ -188,6 +188,42 @@
   cursor: not-allowed;
 }
 
+.track-checkbox-row {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  min-width: 0;
+}
+
+.track-checkbox-row input {
+  accent-color: var(--rust);
+  width: 16px;
+  height: 16px;
+  flex-shrink: 0;
+  cursor: pointer;
+}
+
+.near-dup-choice {
+  display: flex;
+  gap: 0.3rem;
+  flex-shrink: 0;
+}
+
+.near-dup-choice button {
+  background: transparent;
+  border: 1px solid rgba(237, 231, 246, 0.15);
+  border-radius: 6px;
+  padding: 0.3rem 0.5rem;
+  color: var(--paper-dim);
+  font-size: 0.72rem;
+}
+
+.near-dup-choice button.choice-active {
+  border-color: var(--brass-dim);
+  color: var(--brass);
+}
+
 .merge-group {
   display: flex;
   flex-direction: column;
