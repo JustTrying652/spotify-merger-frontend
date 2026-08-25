@@ -49,6 +49,12 @@ export interface NearDuplicatePair {
   b: NearDuplicateTrack;
 }
 
+export interface NearDuplicateResolution {
+  a_uri: string;
+  b_uri: string;
+  keep: "a" | "b" | "both";
+}
+
 export interface DuplicatesResult {
   duplicate_count: number;
   duplicates: DuplicateTrack[];
