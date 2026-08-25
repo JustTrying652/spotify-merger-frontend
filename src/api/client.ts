@@ -75,19 +75,43 @@ export function exportPlaylistUrl(playlistId: string, filetype: "json" | "csv"):
 export const api = {
   login: () => apiFetch<{ auth_url: string }>("/auth/login/"),
   myPlaylists: () => apiFetch<{ playlists: Playlist[] }>("/playlists/"),
-  merge: (playlist_a_id: string, playlist_b_id: string, new_name: string, isPublic: boolean) =>
-    apiFetch<MergeResult>("/merge/", {
-      method: "POST",
-      body: JSON.stringify({ playlist_a_id, playlist_b_id, new_name, public: isPublic }),
-    }),
   findDuplicates: (playlist_a_id: string, playlist_b_id: string) =>
     apiFetch<DuplicatesResult>("/duplicates/", {
       method: "POST",
       body: JSON.stringify({ playlist_a_id, playlist_b_id }),
     }),
-  preview: (playlist_a_id: string, playlist_b_id: string) =>
+    preview: (
+    playlist_a_id: string,
+    playlist_b_id: string,
+    excludedIds: string[],
+    resolutions: NearDuplicateResolution[]
+  ) =>
     apiFetch<PreviewResult>("/preview/", {
       method: "POST",
-      body: JSON.stringify({ playlist_a_id, playlist_b_id }),
+      body: JSON.stringify({
+        playlist_a_id,
+        playlist_b_id,
+        excluded_ids: excludedIds,
+        near_duplicate_resolutions: resolutions,
+      }),
+    }),
+  merge: (
+    playlist_a_id: string,
+    playlist_b_id: string,
+    new_name: string,
+    isPublic: boolean,
+    excludedIds: string[],
+    resolutions: NearDuplicateResolution[]
+  ) =>
+    apiFetch<MergeResult>("/merge/", {
+      method: "POST",
+      body: JSON.stringify({
+        playlist_a_id,
+        playlist_b_id,
+        new_name,
+        public: isPublic,
+        excluded_ids: excludedIds,
+        near_duplicate_resolutions: resolutions,
+      }),
     }),
 };
