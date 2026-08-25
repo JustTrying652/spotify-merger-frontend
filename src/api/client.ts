@@ -42,6 +42,7 @@ export interface NearDuplicateTrack {
   name: string;
   artists: string;
   image: string | null;
+  url: string;
 }
 
 export interface NearDuplicatePair {

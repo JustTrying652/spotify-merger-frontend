@@ -5,6 +5,7 @@ import {
   type Playlist,
   type DuplicateTrack,
   type NearDuplicatePair,
+  type NearDuplicateResolution,
   exportPlaylistUrl,
 } from "./api/client";
 
