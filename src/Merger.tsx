@@ -33,6 +33,8 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     total_duration: string;
   } | null>(null);
   const [mergeUrl, setMergeUrl] = useState<string | null>(null);
+  const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
+  const [nearDupChoices, setNearDupChoices] = useState<Record<number, "a" | "b" | "both">>({});
 
   const bothSelected = playlistAId && playlistBId && playlistAId !== playlistBId;
 
@@ -72,7 +74,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     setError("");
     setPreview(null);
     try {
-      const result = await api.preview(playlistAId, playlistBId);
+      const result = await api.preview(playlistAId, playlistBId, [...excludedIds], buildResolutions());
       setPreview(result);
       setStatus("idle");
     } catch (e) {
@@ -86,7 +88,14 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     setError("");
     setMergeUrl(null);
     try {
-      const result = await api.merge(playlistAId, playlistBId, newName || "Merged Playlist", isPublic);
+      const result = await api.merge(
+        playlistAId,
+        playlistBId,
+        newName || "Merged Playlist",
+        isPublic,
+        [...excludedIds],
+        buildResolutions()
+      );
       setMergeUrl(result.new_playlist_url);
       onPlaylistCreated({
         id: result.new_playlist_id,
@@ -102,6 +111,25 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
       setStatus("error");
     }
   };
+
+  const toggleExcluded = (uri: string) => {
+    const id = uri.split(":").pop()!;
+    setExcludedIds((prev) => {
+      const next = new Set(prev);
+      if (next.has(id)) next.delete(id);
+      else next.add(id);
+      return next;
+    });
+  };
+
+  const buildResolutions = (): NearDuplicateResolution[] =>
+    nearDuplicates
+      .map((pair, i) => ({
+        a_uri: pair.a.uri,
+        b_uri: pair.b.uri,
+        keep: nearDupChoices[i] ?? "both",
+      }))
+      .filter((r) => r.keep !== "both");
 
   return (
     <div className="merger">
@@ -184,7 +212,12 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
           <ul className="track-list">
             {sortedDuplicates!.map((t) => (
               <li key={t.uri}>
-                <div className="track-info">
+                <label className="track-checkbox-row">
+                  <input
+                    type="checkbox"
+                    checked={excludedIds.has(t.uri.split(":").pop()!)}
+                    onChange={() => toggleExcluded(t.uri)}
+                  />
                   {t.image && <img src={t.image} alt="" className="track-thumb" />}
                   <div>
                     <span className="track-name">{t.name}</span>
@@ -192,7 +225,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
                       In {playlistAName} & {playlistBName}
                     </span>
                   </div>
-                </div>
+                </label>
                 <span className="track-artists">{t.artists}</span>
               </li>
             ))}
@@ -213,7 +246,17 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
                     <span className="track-artists">{pair.a.artists}</span>
                   </div>
                 </div>
-                <span className="near-dup-vs">~</span>
+                <div className="near-dup-choice">
+                  {(["a", "both", "b"] as const).map((choice) => (
+                    <button
+                      key={choice}
+                      className={(nearDupChoices[i] ?? "both") === choice ? "choice-active" : ""}
+                      onClick={() => setNearDupChoices((prev) => ({ ...prev, [i]: choice }))}
+                    >
+                      {choice === "a" ? "Keep A" : choice === "b" ? "Keep B" : "Keep both"}
+                    </button>
+                  ))}
+                </div>
                 <div className="near-dup-track">
                   {pair.b.image && <img src={pair.b.image} alt="" className="track-thumb" />}
                   <div>
