@@ -116,6 +116,19 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
     }
   };
 
+  const handleUndo = async () => {
+    if (!lastPlaylistId) return;
+    setUndoStatus("undoing");
+    try {
+      await api.undo(lastPlaylistId);
+      setUndoStatus("done");
+      setMergeUrl(null);
+    } catch (e) {
+      setError(e instanceof Error ? e.message : "Undo failed");
+      setUndoStatus("idle");
+    }
+  };
+
   const toggleExcluded = (uri: string) => {
     const id = uri.split(":").pop()!;
     setExcludedIds((prev) => {
@@ -300,11 +313,18 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
       {mergeUrl && (
         <div className="results success">
           <h2>Playlist created</h2>
-          <a href={mergeUrl} target="_blank" rel="noreferrer" className="brass-link">
-            Open in Spotify
-          </a>
+          <div className="success-actions">
+            <a href={mergeUrl} target="_blank" rel="noreferrer" className="brass-link">
+              Open in Spotify
+            </a>
+            <button className="undo-button" onClick={handleUndo} disabled={undoStatus === "undoing"}>
+              {undoStatus === "undoing" ? "Undoing…" : "Undo"}
+            </button>
+          </div>
         </div>
       )}
+
+      {undoStatus === "done" && <p className="undo-confirm">Playlist removed.</p>}
     </div>
   );
 }
