@@ -115,4 +115,7 @@ export const api = {
         near_duplicate_resolutions: resolutions,
       }),
     }),
+
+  undo: (playlistId: string) =>
+    apiFetch<{ status: string }>(`/undo/${playlistId}/`, { method: "DELETE" }),
 };
