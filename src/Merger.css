@@ -371,6 +371,36 @@
   color: var(--brass);
 }
 
+.success-actions {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.undo-button {
+  background: transparent;
+  border: 1px solid rgba(228, 87, 46, 0.4);
+  color: var(--rust);
+  border-radius: 8px;
+  padding: 0.5rem 1rem;
+  font-size: 0.85rem;
+}
+
+.undo-button:hover:not(:disabled) {
+  border-color: var(--rust);
+}
+
+.undo-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.undo-confirm {
+  color: var(--paper-dim);
+  font-size: 0.85rem;
+  margin-top: 0.75rem;
+}
+
 .track-info > div {
   display: flex;
   flex-direction: column;
