@@ -35,6 +35,8 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
   const [mergeUrl, setMergeUrl] = useState<string | null>(null);
   const [excludedIds, setExcludedIds] = useState<Set<string>>(new Set());
   const [nearDupChoices, setNearDupChoices] = useState<Record<number, "a" | "b" | "both">>({});
+  const [undoStatus, setUndoStatus] = useState<"idle" | "undoing" | "done">("idle");
+  const [lastPlaylistId, setLastPlaylistId] = useState<string | null>(null);
 
   const bothSelected = playlistAId && playlistBId && playlistAId !== playlistBId;
 
@@ -97,6 +99,8 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
         buildResolutions()
       );
       setMergeUrl(result.new_playlist_url);
+      setLastPlaylistId(result.new_playlist_id);
+      setUndoStatus("idle");
       onPlaylistCreated({
         id: result.new_playlist_id,
         name: newName || "Merged Playlist",
