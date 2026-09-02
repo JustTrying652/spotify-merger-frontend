@@ -301,7 +301,7 @@ export function Merger({ playlists, onPlaylistCreated, onBackdropChange }: Merge
             </div>
             <div>
               <span className="preview-number">{preview.duplicates_removed}</span>
-              <span className="preview-label"></span>
+              <span className="preview-label">removed</span>
             </div>
           </div>
           <button className="brass-button" onClick={handleConfirmMerge} disabled={status === "merging"}>
